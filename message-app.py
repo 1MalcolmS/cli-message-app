@@ -35,25 +35,31 @@ if message_mode == "listen":
                
 
 elif message_mode == "connect":
-    print("what ip address would you like to connect to? ")
-    bool1 = True
-    while bool1:
-        CON_HOST = input()
-        if CON_HOST.isupper() or CON_HOST.islower():
-            print("please re-enter ip address")
-        else:
-            bool1 = False
-    print("What port would you like to connect to? ") #figure out ports
-    CON_PORT = input()
-    print("\nport is", CON_PORT, "\n")
-    print("Would you like to save this connection? [y/n]")
-    save = input()
-    name = input("this contact will be saved as: ")
-    if save == "y" or "Y" or "yes":
-        config = open("contacts.txt", "a")
+    print("Enter the name of a contact or the ip address of a new contact ")
+    CON_HOST = input()
+    
+    if CON_HOST.isupper() or CON_HOST.islower():
+        config = open("contacts.txt")
+        line = config.readline()
+        while line != '':
+            first_word = line.split(' ')
+            if first_word[0] == CON_HOST:
+                CON_HOST = first_word[1]
+                CON_PORT = first_word[2]
+            line = config.readline()
+    else:
         
-        config.write(f"{name} {CON_HOST} {CON_PORT} \n") #maybe make this a sqlite db later
-        config.close
+        print("What port would you like to connect to? ") #figure out ports
+        CON_PORT = input()
+        print("\nport is", CON_PORT, "\n")
+        print("Would you like to save this connection? [y/n]")
+        save = input()
+        name = input("this contact will be saved as: ")
+        if save == "y" or "Y" or "yes":
+            config = open("contacts.txt", "a")
+        
+            config.write(f"{name} {CON_HOST} {CON_PORT} \n") #maybe make this a sqlite db later
+            config.close
         
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((CON_HOST, int(CON_PORT)))
