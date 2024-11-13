@@ -2,7 +2,7 @@
 
 import socket
 
-SERV_HOST = "127.0.0.1"
+SERV_HOST = "0.0.0.0"
 SERV_PORT = 64532  #re-evalute this choice
 
 
@@ -54,8 +54,9 @@ elif message_mode == "connect":
         print("\nport is", CON_PORT, "\n")
         print("Would you like to save this connection? [y/n]")
         save = input()
-        name = input("this contact will be saved as: ")
-        if save == "y" or "Y" or "yes":
+        
+        if save in ["Y", "y", "yes"]:
+            name = input("this contact will be saved as: ")
             config = open("contacts.txt", "a")
         
             config.write(f"{name} {CON_HOST} {CON_PORT} \n") #maybe make this a sqlite db later
